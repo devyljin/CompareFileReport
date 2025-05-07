@@ -1,4 +1,4 @@
-# Comparator v.1.1
+# Comparator v.1.1.1
 ## Utilisation
 >  $`./comparator.sh <source_dir> <target_dir> <output_csv_name>`
 
