@@ -21,7 +21,7 @@ if ! command -v rsync &> /dev/null; then
 fi
 
 # Initialise le rapport CSV
-echo "ChangeType,ChangeDetails,FilePath,Size(Bytes),ModDate,BirthDate" > "$OUTPUT_CSV"
+echo "ChangeType;ChangeDetails;FilePath;Size(Bytes);ModDate;BirthDate" > "$OUTPUT_CSV"
 
 # Exécution de rsync en dry-run pour détecter les différences
 rsync -rvnci --delete "$TARGET_DIR"/ "$SOURCE_DIR"/ | while IFS= read -r line; do
@@ -39,19 +39,19 @@ rsync -rvnci --delete "$TARGET_DIR"/ "$SOURCE_DIR"/ | while IFS= read -r line; d
             BIRTH_DATE="Deleted"
 
         fi
-        echo "Deleted,---------,\"$FILE\",$SIZE,\"$MOD_DATE\",\"$BIRTH_DATE\"" >> "$OUTPUT_CSV"
+        echo "Deleted;---------;\"$FILE\";$SIZE;\"$MOD_DATE\";\"$BIRTH_DATE\"" >> "$OUTPUT_CSV"
 
     elif [[ "$line" =~ ^([><ch\.]+)\ *(.+) ]]; then
         CODE="${BASH_REMATCH[1]}"
+        echo $CODE
         FILE="${BASH_REMATCH[2]}"
         PARSED_FILE="${FILE:9}"
         PARSED_UPDATE="${FILE:0:9}"
         FULL_PATH="$SOURCE_DIR/$PARSED_FILE"
-        echo $FULL_PATH
         if [ -e "$FULL_PATH" ]; then
             SIZE=$(stat -f "%z" "$FULL_PATH")
             MOD_DATE=$(stat -f "%Sm" -t "%Y-%m-%d %H:%M:%S" "$FULL_PATH")
-            BIRTH_DATE=$(stat -f "%w" -t "%Y-%m-%d %H:%M:%S" "$FULL_PATH")
+            BIRTH_DATE=$(stat -f "%SB" -t "%Y-%m-%d %H:%M:%S" "$FULL_PATH")
         else
             SIZE="NAN"
             MOD_DATE="NAN"
@@ -64,7 +64,7 @@ rsync -rvnci --delete "$TARGET_DIR"/ "$SOURCE_DIR"/ | while IFS= read -r line; d
             CHANGE_TYPE="Modified"
         fi
 
-        echo "$CHANGE_TYPE,$PARSED_UPDATE,\"$PARSED_FILE\",\"$SIZE\",\"$MOD_DATE\",\"$BIRTH_DATE\"" >> "$OUTPUT_CSV"
+        echo "$CHANGE_TYPE;$PARSED_UPDATE;\"$PARSED_FILE\";\"$SIZE\";\"$MOD_DATE\";\"$BIRTH_DATE\"" >> "$OUTPUT_CSV"
     fi
 done
 

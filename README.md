@@ -1,4 +1,4 @@
-# Comparator v.1
+# Comparator v.1.1
 ## Utilisation
 >  $`./comparator.sh <source_dir> <target_dir> <output_csv_name>`
 
@@ -12,11 +12,20 @@
 ## References
 
 
-| Syntax                   | Description                    |
-|--------------------------|--------------------------------|
-| ChangeType               | Type de changement (Imprecis)  |
-| ChangeDetails            | Nature du changement en itemize | 
-| FilePath                 | Lien du fichier                | 
-| Size(Bytes)              | Taille en bytes                |
-| ModDate                  | Date de modification           |
-| BirthDate (non supporté) | Date de création               | 
+| Syntax                  | Description                     |
+|-------------------------|---------------------------------|
+| ChangeType              | Type de changement (Imprecis)   |
+| ChangeDetails           | Nature du changement en itemize | 
+| FilePath                | Lien du fichier                 | 
+| Size(Bytes)             | Taille en octets                |
+| ModDate                 | Date de modification            |
+| BirthDate | Date de création                | 
+
+
+## Limites
+
+1. les fichier du type:
+>.env
+
+> .gitignore
+
